@@ -1,0 +1,205 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Community Projects - GoHub</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --secondary: #a855f7;
+            --accent: #ec4899;
+            --dark: #0f172a;
+            --light: #f8fafc;
+            --glass: rgba(255, 255, 255, 0.05);
+            --glass-hover: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', system-ui, -apple-system, sans-serif; }
+        body { background: var(--dark); color: var(--light); overflow-x: hidden; min-height: 100vh; }
+
+        /* Background */
+        .bg-gradient { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; background: radial-gradient(circle at 50% 0%, #1e1b4b 0%, #0f172a 100%); }
+        .orb { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.4; animation: float 20s infinite; }
+        .orb-1 { top: -10%; left: -10%; width: 500px; height: 500px; background: var(--primary); }
+        .orb-2 { bottom: 20%; right: -10%; width: 400px; height: 400px; background: var(--secondary); animation-delay: -5s; }
+        .orb-3 { top: 40%; left: 40%; width: 300px; height: 300px; background: var(--accent); animation-delay: -10s; }
+        @keyframes float { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(30px, -30px); } }
+
+        /* Nav */
+        nav { padding: 1.5rem 5%; display: flex; justify-content: space-between; align-items: center; backdrop-filter: blur(20px); background: rgba(15, 23, 42, 0.7); position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--glass-border); }
+        .logo { font-size: 1.5rem; font-weight: 800; background: linear-gradient(to right, #fff, #94a3b8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: flex; align-items: center; gap: 0.5rem; }
+        .nav-links { display: flex; gap: 2rem; }
+        .nav-links a { color: #94a3b8; text-decoration: none; font-weight: 500; transition: all 0.3s; font-size: 0.95rem; }
+        .nav-links a:hover, .nav-links a.active { color: #fff; text-shadow: 0 0 20px rgba(255,255,255,0.5); }
+
+        /* Main */
+        main { max-width: 1200px; margin: 0 auto; padding: 4rem 2rem; }
+
+        .header-section { text-align: center; margin-bottom: 4rem; }
+        h1 { font-size: 4rem; margin-bottom: 1rem; background: linear-gradient(to right, #fff, #cbd5e1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: -1px; }
+        .subtitle { color: #94a3b8; font-size: 1.2rem; max-width: 600px; margin: 0 auto; }
+
+        /* Filters */
+        .filters { display: flex; justify-content: center; gap: 1rem; margin-bottom: 4rem; flex-wrap: wrap; }
+        .filter-btn { padding: 0.8rem 2rem; background: var(--glass); border: 1px solid var(--glass-border); color: #94a3b8; border-radius: 2rem; cursor: pointer; transition: all 0.3s; font-weight: 600; }
+        .filter-btn:hover, .filter-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); transform: translateY(-2px); box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3); }
+
+        /* Gallery Grid */
+        .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 2rem; }
+
+        .gallery-card {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 1.5rem;
+            overflow: hidden;
+            position: relative;
+            height: 400px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+        }
+
+        .gallery-card:hover { transform: translateY(-10px) scale(1.02); border-color: rgba(255,255,255,0.3); box-shadow: 0 20px 40px rgba(0,0,0,0.3); }
+
+        .card-image { height: 100%; width: 100%; object-fit: cover; transition: transform 0.5s; background: linear-gradient(45deg, #1e293b, #0f172a); display: flex; align-items: center; justify-content: center; }
+        .gallery-card:hover .card-image { transform: scale(1.1); }
+        .card-image i { font-size: 5rem; opacity: 0.3; color: var(--light); transition: all 0.5s; }
+        .gallery-card:hover .card-image i { opacity: 0.1; transform: scale(1.5); }
+
+        .card-content {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 2rem;
+            background: linear-gradient(to top, rgba(15, 23, 42, 0.95), transparent);
+            transform: translateY(20px);
+            transition: all 0.4s;
+        }
+        .gallery-card:hover .card-content { transform: translateY(0); }
+
+        .tag { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; color: var(--primary); font-weight: 700; margin-bottom: 0.5rem; display: block; }
+        .card-title { font-size: 1.5rem; margin-bottom: 0.5rem; color: #fff; }
+        .card-desc { color: #94a3b8; font-size: 0.95rem; line-height: 1.6; opacity: 0; transform: translateY(10px); transition: all 0.4s 0.1s; }
+        .gallery-card:hover .card-desc { opacity: 1; transform: translateY(0); }
+
+        .card-arrow { position: absolute; top: 2rem; right: 2rem; width: 40px; height: 40px; background: rgba(255,255,255,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(5px); opacity: 0; transform: rotate(-45deg) scale(0.8); transition: all 0.4s; }
+        .gallery-card:hover .card-arrow { opacity: 1; transform: rotate(0) scale(1); }
+
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            h1 { font-size: 2.5rem; }
+            .gallery-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-gradient"></div>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+
+    <nav>
+        <div class="logo"><i class="fab fa-golang fa-2x"></i><span>GoHub</span></div>
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/about.html">About</a>
+            <a href="/services.html">Services</a>
+            <a href="/gallery.html" class="active">Projects</a>
+            <a href="/blog.html">Blog</a>
+            <a href="/docs.html">Docs</a>
+            <a href="/#submit">Submit</a>
+        </div>
+    </nav>
+
+    <main>
+        <div class="header-section">
+            <h1>Community Projects</h1>
+            <p class="subtitle">Discover amazing open-source projects built by the Go community. From CLIs to Web Servers.</p>
+        </div>
+
+        <div class="filters">
+            <button class="filter-btn active">All Projects</button>
+            <button class="filter-btn">Web</button>
+            <button class="filter-btn">CLI</button>
+            <button class="filter-btn">Systems</button>
+        </div>
+
+        <div class="gallery-grid">
+            <div class="gallery-card">
+                <div class="card-image"><i class="fas fa-globe"></i></div>
+                <div class="card-arrow"><i class="fas fa-arrow-right"></i></div>
+                <div class="card-content">
+                    <span class="tag">Web</span>
+                    <h3 class="card-title">Simple Web Scraper</h3>
+                    <p class="card-desc">A concurrent web scraper that collects data from multiple sites using Go routines and channels.</p>
+                </div>
+            </div>
+
+            <div class="gallery-card">
+                <div class="card-image"><i class="fas fa-terminal"></i></div>
+                <div class="card-arrow"><i class="fas fa-arrow-right"></i></div>
+                <div class="card-content">
+                    <span class="tag">CLI</span>
+                    <h3 class="card-title">Task Master CLI</h3>
+                    <p class="card-desc">A powerful command-line task manager with color output, priority sorting, and file persistence.</p>
+                </div>
+            </div>
+
+            <div class="gallery-card">
+                <div class="card-image"><i class="fas fa-comments"></i></div>
+                <div class="card-arrow"><i class="fas fa-arrow-right"></i></div>
+                <div class="card-content">
+                    <span class="tag">Web</span>
+                    <h3 class="card-title">GoChat Realtime</h3>
+                    <p class="card-desc">WebSocket-based chat application supporting multiple rooms and private messaging.</p>
+                </div>
+            </div>
+
+            <div class="gallery-card">
+                <div class="card-image"><i class="fas fa-server"></i></div>
+                <div class="card-arrow"><i class="fas fa-arrow-right"></i></div>
+                <div class="card-content">
+                    <span class="tag">Systems</span>
+                    <h3 class="card-title">Mini Docker</h3>
+                    <p class="card-desc">A learning project demonstrating how containers work using Linux namespaces and cgroups in Go.</p>
+                </div>
+            </div>
+
+            <div class="gallery-card">
+                <div class="card-image"><i class="fas fa-database"></i></div>
+                <div class="card-arrow"><i class="fas fa-arrow-right"></i></div>
+                <div class="card-content">
+                    <span class="tag">Systems</span>
+                    <h3 class="card-title">KV Store</h3>
+                    <p class="card-desc">A persistent key-value store implemented from scratch with support for transactions.</p>
+                </div>
+            </div>
+
+            <div class="gallery-card">
+                <div class="card-image"><i class="fas fa-gamepad"></i></div>
+                <div class="card-arrow"><i class="fas fa-arrow-right"></i></div>
+                <div class="card-content">
+                    <span class="tag">Game</span>
+                    <h3 class="card-title">Snake in Terminal</h3>
+                    <p class="card-desc">The classic Snake game running entirely in the terminal using the tcell library.</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Simple filter interaction
+        const buttons = document.querySelectorAll('.filter-btn');
+        buttons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                buttons.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>

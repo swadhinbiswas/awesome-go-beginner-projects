@@ -1,0 +1,268 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>About Us - GoServer</title>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --primary: #6366f1;
+        --secondary: #a855f7;
+        --dark: #1e293b;
+        --light: #f8fafc;
+        --glass: rgba(255, 255, 255, 0.1);
+        --glass-border: rgba(255, 255, 255, 0.2);
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Inter", system-ui, -apple-system, sans-serif;
+      }
+      body {
+        background: #0f172a;
+        color: var(--light);
+        overflow-x: hidden;
+        min-height: 100vh;
+      }
+
+      /* Background Shapes */
+      .bg-shapes {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        overflow: hidden;
+      }
+      .shape {
+        position: absolute;
+        filter: blur(100px);
+        opacity: 0.5;
+        animation: float 20s infinite;
+      }
+      .shape-1 {
+        top: -10%;
+        left: -10%;
+        width: 500px;
+        height: 500px;
+        background: var(--primary);
+      }
+      .shape-2 {
+        bottom: -10%;
+        right: -10%;
+        width: 600px;
+        height: 600px;
+        background: var(--secondary);
+        animation-delay: -5s;
+      }
+      @keyframes float {
+        0%,
+        100% {
+          transform: translate(0, 0) rotate(0deg);
+        }
+        50% {
+          transform: translate(30px, -50px) rotate(10deg);
+        }
+      }
+
+      /* Nav */
+      nav {
+        padding: 1.5rem 5%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        backdrop-filter: blur(10px);
+        background: rgba(15, 23, 42, 0.5);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        border-bottom: 1px solid var(--glass-border);
+      }
+      .logo {
+        font-size: 1.5rem;
+        font-weight: 800;
+        background: linear-gradient(to right, #fff, #94a3b8);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      .nav-links {
+        display: flex;
+        gap: 2rem;
+      }
+      .nav-links a {
+        color: #94a3b8;
+        text-decoration: none;
+        font-weight: 500;
+        transition: color 0.3s;
+      }
+      .nav-links a:hover {
+        color: #fff;
+      }
+
+      /* Content */
+      main {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 4rem 2rem;
+      }
+      h1 {
+        font-size: 3.5rem;
+        margin-bottom: 2rem;
+        background: linear-gradient(to right, #fff, #cbd5e1);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        text-align: center;
+      }
+
+      .about-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 4rem;
+        align-items: center;
+        margin-bottom: 6rem;
+      }
+      .about-text p {
+        font-size: 1.1rem;
+        line-height: 1.8;
+        color: #cbd5e1;
+        margin-bottom: 1.5rem;
+      }
+      .about-image {
+        background: var(--glass);
+        border: 1px solid var(--glass-border);
+        border-radius: 1rem;
+        height: 400px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 5rem;
+        color: var(--primary);
+      }
+
+      .team-section {
+        text-align: center;
+      }
+      .team-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 2rem;
+        margin-top: 3rem;
+      }
+      .team-card {
+        background: var(--glass);
+        border: 1px solid var(--glass-border);
+        padding: 2rem;
+        border-radius: 1rem;
+        transition: transform 0.3s;
+      }
+      .team-card:hover {
+        transform: translateY(-10px);
+        border-color: var(--primary);
+      }
+      .avatar {
+        width: 100px;
+        height: 100px;
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        border-radius: 50%;
+        margin: 0 auto 1.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+      }
+      .team-card h3 {
+        margin-bottom: 0.5rem;
+      }
+      .team-card span {
+        color: var(--primary);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      @media (max-width: 768px) {
+        .about-grid {
+          grid-template-columns: 1fr;
+        }
+        .nav-links {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="bg-shapes">
+      <div class="shape shape-1"></div>
+      <div class="shape shape-2"></div>
+    </div>
+
+    <nav>
+      <div class="logo">
+        <i class="fab fa-golang fa-2x"></i><span>GoServer</span>
+      </div>
+      <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="/about.html" style="color: #fff">About</a>
+        <a href="/services.html">Services</a>
+        <a href="/gallery.html">Gallery</a>
+        <a href="/blog.html">Blog</a>
+        <a href="/docs.html">Docs</a>
+        <a href="/#contact">Contact</a>
+      </div>
+    </nav>
+
+    <main>
+      <h1>Our Mission</h1>
+      <div class="about-grid">
+        <div class="about-text">
+          <p>
+            We are dedicated to providing the fastest, most reliable web server
+            solutions powered by the Go programming language. Our journey began
+            with a simple idea: simplicity scales.
+          </p>
+          <p>
+            By leveraging the concurrency primitives of Go, we build systems
+            that handle massive loads with minimal resource footprint. We
+            believe in open source, clean code, and community-driven
+            development.
+          </p>
+        </div>
+        <div class="about-image">
+          <i class="fas fa-rocket"></i>
+        </div>
+      </div>
+
+      <div class="team-section">
+        <h2>Meet the Team</h2>
+        <div class="team-grid">
+          <div class="team-card">
+            <div class="avatar"><i class="fas fa-user-astronaut"></i></div>
+            <h3>Alex Go</h3>
+            <span>Lead Architect</span>
+          </div>
+          <div class="team-card">
+            <div class="avatar"><i class="fas fa-user-ninja"></i></div>
+            <h3>Sarah Concurrency</h3>
+            <span>Backend Engineer</span>
+          </div>
+          <div class="team-card">
+            <div class="avatar"><i class="fas fa-user-secret"></i></div>
+            <h3>Mike Routine</h3>
+            <span>DevOps Specialist</span>
+          </div>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>
