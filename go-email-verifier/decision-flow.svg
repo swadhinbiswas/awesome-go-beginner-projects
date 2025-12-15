@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1400" viewBox="0 0 1200 1400">
+  <style>
+    .box { fill:#ffffff; stroke:#2b6cb0; stroke-width:2px; rx:8; }
+    .text { font-family: Arial, Helvetica, sans-serif; font-size:14px; fill:#1a202c }
+    .title { font-weight:700; font-size:16px }
+    .arrow { stroke:#2d3748; stroke-width:2; fill:none; marker-end:url(#arrowhead);} 
+    .note { font-style:italic; font-size:12px; fill:#4a5568 }
+  </style>
+
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#2d3748" />
+    </marker>
+  </defs>
+
+  <!-- Start -->
+  <rect x="440" y="20" width="320" height="48" class="box" />
+  <text x="600" y="50" text-anchor="middle" class="text title">Start — Email Input</text>
+
+  <!-- Syntax check -->
+  <rect x="80" y="110" width="400" height="64" class="box" />
+  <text x="280" y="140" class="text">Syntax Check (RFC)</text>
+  <text x="280" y="158" class="note">Invalid → Terminal: Invalid</text>
+
+  <line x1="600" y1="68" x2="280" y2="110" class="arrow" />
+
+  <!-- Extract / Normalize -->
+  <rect x="680" y="110" width="440" height="64" class="box" />
+  <text x="900" y="140" class="text">Extract & Normalize Domain (lowercase, IDN→punycode)</text>
+
+  <line x1="480" y1="142" x2="680" y2="142" class="arrow" />
+
+  <!-- Disposable quick-check -->
+  <rect x="80" y="230" width="400" height="64" class="box" />
+  <text x="280" y="260" class="text">Disposable Quick-Check (blacklist, patterns)</text>
+  <text x="280" y="278" class="note">Match → Terminal: Disposable</text>
+
+  <line x1="900" y1="142" x2="280" y2="230" class="arrow" />
+
+  <!-- DNS A/AAAA -->
+  <rect x="680" y="230" width="440" height="64" class="box" />
+  <text x="900" y="260" class="text">DNS Lookup: A / AAAA (timeout & retry)</text>
+  <text x="900" y="278" class="note">NXDOMAIN → Invalid; Timeout → Unknown</text>
+
+  <line x1="480" y1="262" x2="680" y2="262" class="arrow" />
+
+  <!-- MX lookup -->
+  <rect x="80" y="350" width="400" height="80" class="box" />
+  <text x="280" y="385" class="text">MX Lookup & Validate Targets</text>
+  <text x="280" y="403" class="note">MX null (.) → Invalid; MX exists → Mail-capable</text>
+
+  <line x1="900" y1="294" x2="280" y2="350" class="arrow" />
+
+  <!-- RFC fallback / result -->
+  <rect x="680" y="360" width="440" height="64" class="box" />
+  <text x="900" y="390" class="text">RFC fallback: use A if no MX (mark as fallback)</text>
+
+  <line x1="480" y1="390" x2="680" y2="390" class="arrow" />
+
+  <!-- Heuristics -->
+  <rect x="80" y="480" width="400" height="64" class="box" />
+  <text x="280" y="510" class="text">Heuristics (low TTL, frequent MX changes)</text>
+  <text x="280" y="528" class="note">If suspicious → mark Risky (continue)</text>
+
+  <line x1="900" y1="420" x2="280" y2="480" class="arrow" />
+
+  <!-- Optional SMTP probe decision -->
+  <rect x="680" y="480" width="440" height="64" class="box" />
+  <text x="900" y="510" class="text">SMTP Probe Enabled?</text>
+  <text x="900" y="528" class="note">No → Final classification & Cache</text>
+
+  <line x1="480" y1="512" x2="680" y2="512" class="arrow" />
+
+  <!-- SMTP probe -->
+  <rect x="80" y="610" width="400" height="96" class="box" />
+  <text x="280" y="640" class="text">SMTP Probe: Select MX → Connect (25) → EHLO → MAIL FROM → RCPT TO</text>
+  <text x="280" y="660" class="note">250 → Valid; 550 → Invalid; 252 → Catch-all/Unknown</text>
+
+  <line x1="900" y1="512" x2="280" y2="610" class="arrow" />
+
+  <!-- Final scoring -->
+  <rect x="680" y="660" width="440" height="96" class="box" />
+  <text x="900" y="690" class="text">Final Scoring: Combine signals → Status + Confidence</text>
+  <text x="900" y="710" class="note">Cache result (respect TTL) & return</text>
+
+  <line x1="480" y1="658" x2="680" y2="690" class="arrow" />
+
+  <!-- Terminal states -->
+  <rect x="240" y="800" width="720" height="360" class="box" />
+  <text x="600" y="840" class="text title">Terminal States (examples)</text>
+  <text x="360" y="874" class="text">Valid — Mail-capable, mailbox accepted</text>
+  <text x="360" y="898" class="text">Invalid — NXDOMAIN, Null MX, RCPT rejected</text>
+  <text x="360" y="922" class="text">Disposable — Static blacklist match</text>
+  <text x="360" y="946" class="text">Unknown — DNS timeout, SMTP temporary failure</text>
+  <text x="360" y="970" class="text">Risky — Suspicious heuristics applied</text>
+
+  <line x1="900" y1="756" x2="900" y2="800" class="arrow" />
+
+<svg>
