@@ -1,0 +1,63 @@
+The runtime error "invalid memory address or nil pointer dereference" occurs because the database connection variable `functionality.DB` is nil when `SignupHandler` tries to use it.
+
+Here is the breakdown of the issue:
+
+1.  **Uninitialized Global Variable:** In `functionality/db.go`, the global variable `var DB *gorm.DB` is declared but never assigned a value.
+2.  **Missing Initialization Call:** The `main.go` file does not call `functionality.InitDB()`.
+3.  **InitDB Function Behavior:** The `InitDB` function in `functionality/db.go` creates a database connection and *returns* it, but it does not assign it to the global `DB` variable.
+
+**Code references:**
+
+*   **`webserver/routes/routes.go:87`**: `functionality.DB.Create(&newUser)` is called. Since `functionality.DB` is nil, this causes the panic.
+*   **`main.go`**: The application starts up without initializing the database.
+
+**To fix this:**
+You need to initialize the database in `main.go` and assign it to `functionality.DB`.
+
+Example fix in `main.go`:
+```go
+package main
+
+import (
+    ````plaintext
+    Issue: Login form submission returns the HTTP 400 error "All fields are required".
+
+    Summary of what I inspected
+    - The login handler is `routes.LoginHandler` in `routes/routes.go`.
+    - The handler calls `r.ParseForm()` then reads `identifier := r.FormValue("identifier")` and `password := r.FormValue("password")` and returns the error when either is empty.
+    - The served login page (`static/login.html`) contains a POST form:
+        - `<form action="/login" method="POST">`
+        - Inputs: `name="identifier"` and `name="password"` (they match the handler).
+    - `main.go` properly sets `functionality.DB = functionality.InitDB()` so the old content of this file (previously mentioning a nil DB) was stale/incorrect.
+
+    Root causes (most likely)
+    1) Client is not submitting form-encoded fields. If you POST JSON (or another content-type) the standard `r.FormValue(...)` will return empty strings. Common examples:
+         - Sending `Content-Type: application/json` with a JSON body (e.g. via fetch/curl with `-H 'Content-Type: application/json' -d '{"identifier":"x","password":"y"}'`) — the handler expects form data and will see empty fields.
+         - Sending multipart form-data without calling `r.ParseMultipartForm(...)` (not the case for plain HTML form without `enctype`, but possible if a client uses multipart).
+    2) The request body is empty (client-side prevented submission by JS or used `fetch` without body), so `identifier`/`password` are empty.
+    3) Less likely in this repo: mismatched `name` attributes — but here the HTML uses `name="identifier"` and `name="password"`, so that is not the problem.
+
+    How to confirm quickly
+    - Open browser DevTools Network tab, submit the form, and inspect the POST request:
+        - Confirm `Request Headers` show `Content-Type: application/x-www-form-urlencoded` and the `Request Payload` contains `identifier=...&password=...`.
+    - Or use curl form-encoding to test the handler:
+        - `curl -v -X POST -d "identifier=alice&password=secret" http://localhost:8080/login`
+        - This must return either the login success page or a 401 if credentials are wrong; it should NOT return the 400 "All fields are required" if form fields are present.
+
+    Recommended fixes / mitigations
+    - If clients send JSON (e.g. mobile app or JS `fetch`), modify the handler to accept JSON as well. Minimal example:
+        - Try reading `r.Header.Get("Content-Type")` and `if strings.Contains(ct, "application/json") { json.NewDecoder(r.Body).Decode(&payload) }` and check fields.
+    - Or ensure clients submit `application/x-www-form-urlencoded` (standard HTML form does this by default).
+    - Add logging to the handler while debugging to print `r.Header.Get("Content-Type")` and `r.Form`/`r.PostForm` to quickly see what the server actually receives.
+
+    Notes
+    - Ignore the `Login` struct in `functionality` — it is unused and not involved in this behavior.
+    - The previous contents of this file incorrectly blamed an uninitialized DB; the repo's `main.go` already initializes `functionality.DB`.
+
+    Short actionable next steps you can take now
+    1. Reproduce with browser and check Network request Content-Type and payload.
+    2. If using an API client, re-send as form-encoded or change handler to accept JSON.
+    3. To debug on server, add temporary logging in `routes.LoginHandler`:
+         - `log.Printf("CT=%s, Form=%v, PostForm=%v", r.Header.Get("Content-Type"), r.Form, r.PostForm)`
+
+    ````

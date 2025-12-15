@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Dashboard - GoHub</title>
+    <style>
+      body {
+        font-family: Inter, system-ui, -apple-system, sans-serif;
+        background: #0f172a;
+        color: #e6eef8;
+        margin: 0;
+      }
+      header {
+        padding: 1.5rem 4%;
+        background: rgba(255, 255, 255, 0.02);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+      }
+      .container {
+        max-width: 1000px;
+        margin: 2rem auto;
+        padding: 0 1rem;
+      }
+      .card {
+        background: rgba(255, 255, 255, 0.02);
+        padding: 1.2rem;
+        border-radius: 8px;
+      }
+      h1 {
+        font-size: 1.6rem;
+        margin-bottom: 0.25rem;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 1rem;
+        margin-top: 1rem;
+      }
+      .panel {
+        padding: 1rem;
+        border-radius: 6px;
+        background: rgba(255, 255, 255, 0.01);
+        border: 1px solid rgba(255, 255, 255, 0.02);
+      }
+      a {
+        color: #8ab4ff;
+        text-decoration: none;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="container">
+        <div
+          style="
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+          "
+        >
+          <div style="font-weight: 700; font-size: 1.1rem">GoHub</div>
+          <nav>
+            <a href="/">Home</a> &nbsp;|&nbsp;
+            <a href="/profile">Profile</a> &nbsp;|&nbsp;
+            <a href="/logout">Log out</a>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <main class="container">
+      <div class="card">
+        <h1>Welcome to your Dashboard</h1>
+        <p>
+          You're logged in. This is a simple starter dashboard — expand it with
+          widgets and user-specific data.
+        </p>
+
+        <div class="grid">
+          <div class="panel">
+            <strong>Projects</strong>
+            <p>View and manage your projects.</p>
+            <p><a href="/gallery">Open Projects</a></p>
+          </div>
+          <div class="panel">
+            <strong>Profile</strong>
+            <p>Edit your profile and settings.</p>
+            <p><a href="/">Go to Profile</a></p>
+          </div>
+          <div class="panel">
+            <strong>Activity</strong>
+            <p>Recent account activity and notifications.</p>
+          </div>
+          <div class="panel">
+            <strong>Support</strong>
+            <p>Help, docs and contact info.</p>
+          </div>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>
